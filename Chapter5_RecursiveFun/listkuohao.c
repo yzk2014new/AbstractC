@@ -19,16 +19,20 @@ void listKuoHao(int n) {
 }
 
 void printKuoHao(char *str, int n) {
+	//printf("printKuoHao: %s, %d\n", str, n);
     if (str == 0 || n < 0 || n > STRING_LENGTH / 2) {
         printf("input is invalid.\n");
         return;
     }
-    if (n == 0) {
-        printf("%s\n", str);
+    if (n == 1 && strlen(str) == 0) {
+		printf("()\n");
+	} else if (n == 0) {
+		printf("%s\n", str);
     } else {
         char *newStr1 = (char *)malloc(STRING_LENGTH);
         char *newStr2 = (char *)malloc(STRING_LENGTH);
-        if (newStr1 == 0 || newStr2 == NULL) {
+		char *newStr3 = (char *)malloc(STRING_LENGTH);
+        if (newStr1 == 0 || newStr2 == NULL || newStr3 == NULL) {
             printf("alloc memory failed.\n");
             return;
         }
@@ -36,25 +40,27 @@ void printKuoHao(char *str, int n) {
         strcat(newStr1, "()");
         strcpy(newStr2, "()");
         strcat(newStr2, str);
-        printf("n: %d, str1: %s, str2: %s, cmp: %d\n", n, newStr1, newStr2, strcmp(newStr1, newStr2));
+		strcpy(newStr3, "(");
+        strcat(newStr3, str);
+        strcat(newStr3, ")");
+		printKuoHao(newStr1, n - 1);
         if (strcmp(newStr1, newStr2) == 0) {
-            printKuoHao(newStr1, n - 1);
+			if (strcmp(newStr1, newStr3) != 0) {
+				printKuoHao(newStr3, n - 1);
+			}
         } else {
-            printKuoHao(newStr1, n - 1);
-            printKuoHao(newStr2, n - 1);
+			printKuoHao(newStr2, n - 1);
+			if (strcmp(newStr1, newStr3) != 0 && strcmp(newStr2, newStr3) != 0) {
+				printKuoHao(newStr3, n - 1);
+			}
         }
-        free(newStr1);
-
-        newStr2[0] = '\0';
-        strcpy(newStr2, "(");
-        strcat(newStr2, str);
-        strcat(newStr2, ")");
-        printKuoHao(newStr2, n - 1);
+		free(newStr1);
         free(newStr2);
+		free(newStr3);
     }
 }
 
 int main() {
-    printf("Hello world!\n");
-    listKuoHao(2);
+    printf("\n\n\nHello world!\n");
+    listKuoHao(3);
 }
